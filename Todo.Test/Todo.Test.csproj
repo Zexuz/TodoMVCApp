@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
+    <PackageReference Include="xunit" Version="2.2.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Todo.Domain\Todo.Domain.csproj">
+      <Project>{eb59b73c-c1c6-4cc8-b370-9427f76822e1}</Project>
+      <Name>Todo.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Todo.MVC\Todo.MVC.csproj">
+      <Project>{e5c45791-caf5-493a-b237-1faa296ae79b}</Project>
+      <Name>Todo.MVC</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>
