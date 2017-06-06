@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Todo.Domain.Repository;
+using Todo.Domain.Todo.Checklist;
+using Todo.Domain.Todo.Note;
 
 namespace Todo.MVC
 {
@@ -24,6 +28,11 @@ namespace Todo.MVC
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+            var connection = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<TodoContext>(options => options.UseSqlServer(connection));
+            services.AddTransient<IRepository<TodoChecklist>, TodoCheckListRepository>();
+            services.AddTransient<IRepository<TodoNote>, TodoNoteRepository>();
+                
             services.AddMvc();
         }
 
