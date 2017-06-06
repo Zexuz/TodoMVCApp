@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Todo.Domain.Repository;
 using Todo.Domain.Todo.Checklist;
 using Todo.Domain.Todo.Note;
+using Todo.MVC.ViewModels;
 
 namespace Todo.MVC.Controllers
 {
-    public class HomeController : Controller
+    public class TodoController : Controller
     {
         private readonly IRepository<TodoChecklist> _todoCheckLists;
         private readonly IRepository<TodoNote> _todoNotes;
 
-        public HomeController(IRepository<TodoChecklist> todoCheckLists, IRepository<TodoNote> todoNotes)
+        public TodoController(IRepository<TodoChecklist> todoCheckLists, IRepository<TodoNote> todoNotes)
         {
             _todoCheckLists = todoCheckLists;
             _todoNotes = todoNotes;
@@ -21,20 +23,24 @@ namespace Todo.MVC.Controllers
 
         public IActionResult Index()
         {
-            return View();
-        }
-        
-        public IActionResult GetAll()
-        {
-            dynamic data = new ExpandoObject();
-            data.checkLists = _todoCheckLists.GetAll();
-            data.notes = _todoNotes.GetAll();
-            return Json(data);
+            var vm = new IndexViewModel
+            {
+                Checklists = _todoCheckLists.GetAll().ToList(),
+                Notes = _todoNotes.GetAll().ToList()
+            };
+            return View(vm);
         }
 
-        
-        
-        
+        public IActionResult GetAll()
+        {
+            return Json(new
+            {
+                checkLists = _todoCheckLists.GetAll(),
+                notes = _todoNotes.GetAll()
+            });
+        }
+
+
         public IActionResult AddNote()
         {
             var e = new TodoNote
@@ -47,8 +53,8 @@ namespace Todo.MVC.Controllers
             _todoNotes.Add(e);
             return Ok();
         }
-        
-        
+
+
         public IActionResult AddChecklist()
         {
             var e = new TodoChecklist
@@ -75,7 +81,7 @@ namespace Todo.MVC.Controllers
             return Ok();
         }
 
-        
+
         public IActionResult Error()
         {
             return View();
