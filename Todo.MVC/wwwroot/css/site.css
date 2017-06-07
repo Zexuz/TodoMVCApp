@@ -17,3 +17,9 @@ article.checklist a{
 label[contenteditable]:focus {
     outline: 0px solid transparent;
 }
+
+p.last-edit{
+    margin: 0;
+    font-size: small;
+    color: grey;
+}

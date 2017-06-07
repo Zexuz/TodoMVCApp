@@ -9,13 +9,17 @@ $(document).ready(function () {
     $("article.checklist h2.title").blur(checkboxChanged);
     $("article.checklist h2.title").keyup(syncCheckboxTitle);
 
+    $("label.item-name").blur(checkboxChanged);
+    $("label.item-name").keyup(syncCheckboxItemTitle);
+    $("label.item-name").keypress(preventEnterAndGoToNext);
+
     $("article.note h2.title").keyup(syncNoteTitle);
     $("article.note h2.title").blur(noteChanged);
+    $("article.note h2.title").keypress(preventEnterAndGoToNext);
     $("article.note div.note").keyup(syncNoteText);
     $("article.note div.note").blur(noteChanged);
 
-
-    $("label").click(function (e) {
+    $("label.item-name").click(function (e) {
         var offset = e.offsetX;
         if (offset >= 35)
             e.preventDefault();
@@ -29,6 +33,29 @@ $(document).ready(function () {
     // })
 
 });
+
+function preventEnterAndGoToNext(e) {
+    if(e.which === 13) {
+        // $(this).next().focus();
+        return false;
+    }
+    return true;
+}
+
+function syncCheckboxItemTitle() {
+    var ele = $(this).closest("article.checklist");
+    var myId = $(this).data("id");
+    var newText = $(this).text();
+    ele.find("label").each(function (i, e) {
+        if ($(e).text() === newText) {
+            console.log("samne");
+            return;
+        }
+        var eleId = $(e).data("id");
+        if (myId === eleId)
+            $(e).text(newText);
+    });
+}
 
 function checkboxChanged() {
     var ele = $(this).closest("article.checklist");
@@ -107,6 +134,7 @@ function syncCheckboxTitle(event) {
 function syncNoteTitle(event) {
     var ele = $(this).closest("article.note");
     var newText = $(this).text();
+
     ele.find("h2").each(function (i, e) {
         if ($(e).text() === newText) {
             console.log("samne");

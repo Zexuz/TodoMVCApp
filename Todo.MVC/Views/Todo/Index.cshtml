@@ -14,7 +14,7 @@
             <div class="modal-content">
                 <h2 class="title editable" contenteditable="true">@note.Title</h2>
                 <div class="note editable" contenteditable="true">@note.Note</div>
-                <p class="grey">Last edit @note.LastEdit</p>
+                <p class="right last-edit">Last edit @note.LastEdit</p>
             </div>
             <div class="modal-footer">
                 <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Done<i class="material-icons right">send</i></a>
@@ -39,7 +39,7 @@
                                                                                                                                                                                                          @Html.Raw("checked")
                                                                                                                                                                                                      }/>
 
-                <label for="indeterminate-checkbox-@checkListItem.Id">
+                <label data-id="@checkListItem.Id" for="indeterminate-checkbox-@checkListItem.Id">
                     <a href="#modal-checklist-@checkList.Id">
                         @checkListItem.Text
                     </a>
@@ -58,9 +58,11 @@
                                                                                                                                                                                                      @Html.Raw("checked")
                                                                                                                                                                                                  }/>
 
-                        <label class="unbind" contenteditable="true" for="indeterminate-checkbox-modal-@checkListItem.Id">@checkListItem.Text</label>
+                        <label class="item-name" data-id="@checkListItem.Id" contenteditable="true" for="indeterminate-checkbox-modal-@checkListItem.Id">@checkListItem.Text</label>
                     </div>
                 }
+                <p class="right last-edit">Last edit @checkList.LastEdit</p>
+
             </div>
             <div class="modal-footer">
                 <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Done<i class="material-icons right">send</i></a>
