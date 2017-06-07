@@ -17,7 +17,7 @@
                 <p class="grey">Last edit @note.LastEdit</p>
             </div>
             <div class="modal-footer">
-                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Done</a>
+                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Done<i class="material-icons right">send</i></a>
             </div>
         </div>
     </article>
@@ -34,10 +34,10 @@
         @foreach (var checkListItem in checkList.CheckList)
         {
             <div >
-                <input type="checkbox" id="indeterminate-checkbox-@checkListItem.Id" @if (checkListItem.Checked)
-                                                                                     {
-                                                                                         @Html.Raw("checked")
-                                                                                     }/>
+                <input type="checkbox" data-id="@checkListItem.Id" data-checklist-id="@checkList.Id" id="indeterminate-checkbox-@checkListItem.Id" class="checkbox-listener id-nr-@checkListItem.Id" @if (checkListItem.Checked)
+                                                                                                                     {
+                                                                                                                         @Html.Raw("checked")
+                                                                                                                     }/>
 
                 <label for="indeterminate-checkbox-@checkListItem.Id">
                     <a href="#modal-checklist-@checkList.Id">
@@ -53,17 +53,17 @@
                 @foreach (var checkListItem in checkList.CheckList)
                 {
                     <div >
-                        <input type="checkbox" id="indeterminate-checkbox-modal-@checkListItem.Id" @if (checkListItem.Checked)
-                                                                                                   {
-                                                                                                       @Html.Raw("checked")
-                                                                                                   }/>
+                        <input type="checkbox" data-id="@checkListItem.Id" data-checklist-id="@checkList.Id" id="indeterminate-checkbox-modal-@checkListItem.Id" class="id-nr-@checkListItem.Id" @if (checkListItem.Checked)
+                                                                                                                                   {
+                                                                                                                                       @Html.Raw("checked")
+                                                                                                                                   }/>
 
                         <label for="indeterminate-checkbox-modal-@checkListItem.Id">@checkListItem.Text</label>
                     </div>
                 }
             </div>
             <div class="modal-footer">
-                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Done</a>
+                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Done<i class="material-icons right">send</i></a>
             </div>
         </div>
     </article>

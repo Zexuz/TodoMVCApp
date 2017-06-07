@@ -14,8 +14,8 @@ namespace Todo.Domain.Repository
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<TodoNote>();
-            modelBuilder.Entity<TodoChecklist>();
-            
+            modelBuilder.Entity<TodoChecklist>().HasMany(a => a.CheckList);
+           
             base.OnModelCreating(modelBuilder);
         }
 

@@ -40,6 +40,27 @@ namespace Todo.MVC.Controllers
             });
         }
 
+        [HttpPost]
+        public IActionResult UpdateCheckbox([FromBody] TodoChecklist checklist)
+        {
+            var oldCheckList = _todoCheckLists.GetById(checklist.Id);
+            if (oldCheckList == null) return NotFound();
+
+            foreach (var oldItem in oldCheckList.CheckList)
+            {
+                foreach (var item in checklist.CheckList)
+                {
+                    if (oldItem.Id != item.Id) continue;
+                    oldItem.Text = item.Text;
+                    oldItem.Checked = item.Checked;
+                }
+            }
+            oldCheckList.LastEdit = DateTime.Now;
+            oldCheckList.Title = checklist.Title;
+
+            _todoCheckLists.Update(oldCheckList);
+            return Ok();
+        }
 
         public IActionResult AddNote()
         {

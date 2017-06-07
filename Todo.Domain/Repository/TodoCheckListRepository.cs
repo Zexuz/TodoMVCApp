@@ -18,7 +18,7 @@ namespace Todo.Domain.Repository
 
         public TodoChecklist GetById(int id)
         {
-            return _context.TodoChecklists.SingleOrDefault(t => t.Id == id);
+            return _context.TodoChecklists.Include(c => c.CheckList).SingleOrDefault(t => t.Id == id);
         }
 
         public TodoChecklist Update(TodoChecklist entity)
@@ -49,7 +49,7 @@ namespace Todo.Domain.Repository
 
         public IEnumerable<TodoChecklist> FindAll(Expression<Func<TodoChecklist, bool>> predicate)
         {
-            return _context.TodoChecklists.Where(predicate).ToList();
+            return _context.TodoChecklists.Include(c => c.CheckList).Where(predicate).ToList();
         }
     }
 }
