@@ -6,34 +6,68 @@ $(document).ready(function () {
     $("input[type=checkbox]").click(syncCheckboxState);
 
     $(".checkbox-listener").change(checkboxChanged);
+    $("article.checklist h2.title").blur(checkboxChanged);
+    $("article.checklist h2.title").keyup(syncCheckboxTitle);
+
+    $("article.note h2.title").keyup(syncNoteTitle);
+    $("article.note h2.title").blur(noteChanged);
+    $("article.note div.note").keyup(syncNoteText);
+    $("article.note div.note").blur(noteChanged);
+
+
+    $("label").click(function (e) {
+        var offset = e.offsetX;
+        if (offset >= 35)
+            e.preventDefault();
+    })
+
+    // $("a.label-edit").click(function () {
+    //     var label = $(this).siblings("label").first();
+    //     setTimeout(function() {
+    //         label.focus();
+    //     }, 0);
+    // })
 
 });
 
 function checkboxChanged() {
-        var ele = $(this).closest("article.checklist");
+    var ele = $(this).closest("article.checklist");
 
-        var checkListJson = [];
+    var checkListJson = [];
 
-        ele.find("input[type=checkbox]").each(function (e, index, array) {
-            debugger;
-            var checked = $(e).is(":checked");
-            var text = $(e).parent().find("label").first().text();
-            var id = $(e).data("id");
-            checkListJson.push({
-                Id: id,
-                Checked: checked,
-                Text: text
-            })
-        });
+    ele.find("input[type=checkbox]").each(function (index, e) {
+        var id = $(e).data("id");
+        if (checkListJson.map(function (p1, p2, p3) {
+                return p1.Id
+            }).indexOf(id) > -1) return;
 
-        sendUpdateCheckboxRequest(
-            {
-                Id: ele.data("checklist-id"),
-                CheckList: checkListJson,
-                Title: ele.closest("h2.title").text()
-            }
-        )
+        var checked = $(e).is(":checked");
+        var siblings = $(e).siblings();
+        var label = siblings.first();
+        var text = label.text().trim();
+        checkListJson.push({
+            Id: id,
+            Checked: checked,
+            Text: text
+        })
+    });
+    var dataToSend = {
+        Id: ele.data("id"),
+        CheckList: checkListJson,
+        Title: ele.find("h2.title.editable").text().trim()
+    };
+    sendUpdateCheckboxRequest(dataToSend);
+}
 
+function noteChanged() {
+    var ele = $(this).closest("article.note");
+
+    var dataToSend = {
+        Id: ele.data("id"),
+        Note: ele.find("div.note.editable").text().trim(),
+        Title: ele.find("h2.title.editable").text().trim()
+    };
+    sendUpdateNoteRequest(dataToSend);
 }
 
 function syncCheckboxState() {
@@ -57,10 +91,59 @@ function syncCheckboxState() {
     });
 }
 
+
+function syncCheckboxTitle(event) {
+    var ele = $(this).closest("article.checklist");
+    var newText = $(this).text();
+    ele.find("h2").each(function (i, e) {
+        if ($(e).text() === newText) {
+            console.log("samne");
+            return;
+        }
+        $(e).text(newText);
+    });
+}
+
+function syncNoteTitle(event) {
+    var ele = $(this).closest("article.note");
+    var newText = $(this).text();
+    ele.find("h2").each(function (i, e) {
+        if ($(e).text() === newText) {
+            console.log("samne");
+            return;
+        }
+        $(e).text(newText);
+    });
+}
+
+function syncNoteText(evnet) {
+    var ele = $(this).closest("article.note");
+    var newText = $(this).text();
+    ele.find("div.note").each(function (i, e) {
+        if ($(e).text() === newText) {
+            console.log("samne");
+            return;
+        }
+        $(e).text(newText);
+    });
+}
+
 function sendUpdateCheckboxRequest(data) {
 
     $.ajax({
-        url: './updateCheckbox',
+        url: '/todo/updateCheckbox',
+        type: 'POST',
+        data: JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+        traditional: true,
+        success: function (result) {
+        }
+    });
+}
+function sendUpdateNoteRequest(data) {
+
+    $.ajax({
+        url: '/todo/updateNote',
         type: 'POST',
         data: JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
@@ -74,7 +157,7 @@ function sendUpdateCheckboxRequest(data) {
 function sendDeleteRequest(dataId, elementId) {
 
     $.ajax({
-        url: './delete',
+        url: '/todo/delete',
         type: 'DELETE',
         data: {id: dataId},
         success: function (result) {

@@ -10,3 +10,10 @@ article.note{
 article.note a{
     color: inherit;
 }
+article.checklist a{
+    color: inherit;
+}
+
+label[contenteditable]:focus {
+    outline: 0px solid transparent;
+}

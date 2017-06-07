@@ -61,6 +61,20 @@ namespace Todo.MVC.Controllers
             _todoCheckLists.Update(oldCheckList);
             return Ok();
         }
+        
+        [HttpPost]
+        public IActionResult UpdateNote([FromBody] TodoNote todoNote)
+        {
+            var oldNote = _todoNotes.GetById(todoNote.Id);
+            if (oldNote == null) return NotFound();
+
+            oldNote.LastEdit = DateTime.Now;
+            oldNote.Title = todoNote.Title;
+            oldNote.Note= todoNote.Note;
+
+            _todoNotes.Update(oldNote);
+            return Ok();
+        }
 
         public IActionResult AddNote()
         {
