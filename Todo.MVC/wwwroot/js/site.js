@@ -38,6 +38,21 @@ function updateEventHandlers() {
 
     $("a.remove-checklist-item").click(removeCheckListItem);
 
+    $("a#create-new-note").click(createNewNote);
+    $("a#create-new-checklist").click(createNewChecklist);
+
+}
+
+function createNewNote() {
+    sendCreateNote(function (res) {
+        //todo add it to the ui
+    });
+}
+
+function createNewChecklist() {
+    sendCreateNewChecklist(function (res) {
+        //todo add it to the ui
+    })
 }
 function removeCheckListItem() {
     var ele = $(this).closest("article.checklist");
@@ -287,6 +302,35 @@ function sendDeleteCheckboxRequest(checkListId, checkListItemId, callback) {
         type: 'DELETE',
         success: function (result) {
             callback();
+        }
+    });
+}
+
+
+function sendCreateNewChecklist(callback) {
+
+    $.ajax({
+        url: '/todo/CreateChecklist',
+        type: 'POST',
+        contentType: "application/json; charset=utf-8",
+        traditional: true,
+        success: function (result) {
+            console.log(result);
+            callback(result)
+        }
+    });
+}
+
+function sendCreateNote(callback) {
+
+    $.ajax({
+        url: '/todo/CreateNote',
+        type: 'POST',
+        contentType: "application/json; charset=utf-8",
+        traditional: true,
+        success: function (result) {
+            console.log(result);
+            callback(result)
         }
     });
 }

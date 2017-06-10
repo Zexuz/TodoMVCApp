@@ -3,6 +3,11 @@
     ViewData["Title"] = "Home Page";
 }
 
+<div class="row">
+    <a class="col s5 btn left" href="#!" id="create-new-checklist">Create new checklist</a>
+    <a class="col s5 btn right" href="#!" id="create-new-note">Create new note</a>
+</div>
+
 @foreach (var note in Model.Notes)
 {
     <article class="note z-depth-1" data-id="@note.Id">

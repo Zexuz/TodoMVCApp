@@ -48,8 +48,9 @@ namespace Todo.MVC.Controllers
 
             var checkListItem = new TodoCheckListItem();
             oldCheckList.CheckList.Add(checkListItem);
-
+            oldCheckList.LastEdit = DateTime.Now;
             _todoCheckLists.Update(oldCheckList);
+
             return Ok(Json(checkListItem));
         }
         [HttpDelete]
@@ -62,6 +63,7 @@ namespace Todo.MVC.Controllers
             if (checkListItem == null) return NotFound();
 
             oldCheckList.CheckList.Remove(checkListItem);
+            oldCheckList.LastEdit = DateTime.Now;
 
             _todoCheckLists.Update(oldCheckList);
             return Ok(Json(checkListItem));
@@ -104,44 +106,28 @@ namespace Todo.MVC.Controllers
             return Ok();
         }
 
-        public IActionResult AddNote()
+        [HttpPost]
+        public IActionResult CreateNote()
         {
-            var e = new TodoNote
+            if(!ModelState.IsValid)
             {
-                Title = "Hello, World!",
-                Note = "It's Alive!",
-                Created = DateTime.Now,
-                LastEdit = DateTime.Now
-            };
-            _todoNotes.Add(e);
-            return Ok();
+                return BadRequest();
+            }
+            var todoNote = new TodoNote();
+            _todoNotes.Add(todoNote);
+            return Ok(Json(todoNote));
         }
 
 
-        public IActionResult AddChecklist()
+        public IActionResult CreateChecklist()
         {
-            var e = new TodoChecklist
+            if(!ModelState.IsValid)
             {
-                Title = "Hello, World!",
-                Created = DateTime.Now,
-                LastEdit = DateTime.Now,
-                CheckList = new List<TodoCheckListItem>
-                {
-                    new TodoCheckListItem
-                    {
-                        Checked = false,
-                        Text = "Fix site"
-                    },
-                    new TodoCheckListItem
-                    {
-                        Checked = true,
-                        Text = "Be awesome"
-                    }
-                }
-            };
-
-            _todoCheckLists.Add(e);
-            return Ok();
+                return BadRequest();
+            }
+            var todoChecklist = new TodoChecklist();
+            _todoCheckLists.Add(todoChecklist);
+            return Ok(Json(todoChecklist));
         }
 
 
