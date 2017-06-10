@@ -39,6 +39,34 @@ namespace Todo.MVC.Controllers
                 notes = _todoNotes.GetAll()
             });
         }
+        
+        [HttpPost]
+        public IActionResult AddCheckbox(int checkListId)
+        {
+            var oldCheckList = _todoCheckLists.GetById(checkListId);
+            if (oldCheckList == null) return NotFound();
+
+            var checkListItem = new TodoCheckListItem();
+            oldCheckList.CheckList.Add(checkListItem);
+
+            _todoCheckLists.Update(oldCheckList);
+            return Ok(Json(checkListItem));
+        }
+        [HttpDelete]
+        public IActionResult DeleteCheckbox(int checkListId, int checkListItemId)
+        {
+            var oldCheckList = _todoCheckLists.GetById(checkListId);
+            if (oldCheckList == null) return NotFound();
+
+            var checkListItem = oldCheckList.CheckList.SingleOrDefault(item => item.Id == checkListItemId);
+            if (checkListItem == null) return NotFound();
+
+            oldCheckList.CheckList.Remove(checkListItem);
+
+            _todoCheckLists.Update(oldCheckList);
+            return Ok(Json(checkListItem));
+        }
+        
 
         [HttpPost]
         public IActionResult UpdateCheckbox([FromBody] TodoChecklist checklist)
