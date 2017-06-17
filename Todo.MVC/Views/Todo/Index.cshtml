@@ -11,6 +11,9 @@
 @foreach (var note in Model.Notes)
 {
     <article class="note z-depth-1" data-id="@note.Id">
+        <a class="remove-todo-item right" href="#!">
+            <i class="material-icons">close</i>
+        </a>
         <a href="#modal-note-@note.Id">
             <h2 class="title">@note.Title</h2>
             <div class="note">@note.Note</div>
@@ -31,7 +34,9 @@
 @foreach (var checkList in Model.Checklists)
 {
     <article class="checklist col s4 z-depth-1" data-id="@checkList.Id">
-
+        <a class="remove-todo-item right" href="#!">
+            <i class="material-icons">close</i>
+        </a>
         <a href="#modal-checklist-@checkList.Id">
             <h2 class="title ">@checkList.Title</h2>
         </a>

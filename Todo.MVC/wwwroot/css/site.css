@@ -1,16 +1,17 @@
 ﻿
-nav{
+nav {
     margin-bottom: 10px;
 }
 
-article.note{
+article.note {
     padding: 10px;
 }
 
-article.note a{
+article.note a {
     color: inherit;
 }
-article.checklist a{
+
+article.checklist a {
     color: inherit;
 }
 
@@ -18,8 +19,18 @@ label[contenteditable]:focus {
     outline: 0px solid transparent;
 }
 
-p.last-edit{
+p.last-edit {
     margin: 0;
     font-size: small;
     color: grey;
 }
+
+a.remove-todo-item {
+    position: relative;
+    top: 10px;
+    right: 10px;
+    
+}
+     
+     
+ 

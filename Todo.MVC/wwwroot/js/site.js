@@ -41,6 +41,17 @@ function updateEventHandlers() {
     $("a#create-new-note").click(createNewNote);
     $("a#create-new-checklist").click(createNewChecklist);
 
+    $("a.remove-todo-item").click(removeTodoItem);
+}
+
+function removeTodoItem() {
+    var ele = $(this).closest("article");
+    var id = ele.data("id");
+    
+    
+    sendDeleteTodoItemRequest(id, ele.hasClass("checklist"),function () {
+        ele.remove();
+    })
 }
 
 function createNewNote() {
@@ -305,6 +316,24 @@ function sendDeleteCheckboxRequest(checkListId, checkListItemId, callback) {
         }
     });
 }
+
+function sendDeleteTodoItemRequest(id, isChecklist, callback) {
+
+    $.ajax({
+        contentType: "application/json; charset=utf-8",
+        traditional: true,
+        url: '/todo/DeleteTodoItem',
+        data:JSON.stringify({
+            id:id, 
+            isChecklist:isChecklist
+        }),
+        type: 'DELETE',
+        success: function (result) {
+            callback();
+        }
+    });
+}
+
 
 
 function sendCreateNewChecklist(callback) {

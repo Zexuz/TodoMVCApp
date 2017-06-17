@@ -39,7 +39,7 @@ namespace Todo.MVC.Controllers
                 notes = _todoNotes.GetAll()
             });
         }
-        
+
         [HttpPost]
         public IActionResult AddCheckbox(int checkListId)
         {
@@ -53,6 +53,7 @@ namespace Todo.MVC.Controllers
 
             return Ok(Json(checkListItem));
         }
+
         [HttpDelete]
         public IActionResult DeleteCheckbox(int checkListId, int checkListItemId)
         {
@@ -68,7 +69,7 @@ namespace Todo.MVC.Controllers
             _todoCheckLists.Update(oldCheckList);
             return Ok(Json(checkListItem));
         }
-        
+
 
         [HttpPost]
         public IActionResult UpdateCheckbox([FromBody] TodoChecklist checklist)
@@ -91,7 +92,7 @@ namespace Todo.MVC.Controllers
             _todoCheckLists.Update(oldCheckList);
             return Ok();
         }
-        
+
         [HttpPost]
         public IActionResult UpdateNote([FromBody] TodoNote todoNote)
         {
@@ -100,7 +101,7 @@ namespace Todo.MVC.Controllers
 
             oldNote.LastEdit = DateTime.Now;
             oldNote.Title = todoNote.Title;
-            oldNote.Note= todoNote.Note;
+            oldNote.Note = todoNote.Note;
 
             _todoNotes.Update(oldNote);
             return Ok();
@@ -109,11 +110,17 @@ namespace Todo.MVC.Controllers
         [HttpPost]
         public IActionResult CreateNote()
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
-            var todoNote = new TodoNote();
+            var todoNote = new TodoNote
+            {
+                Title = "TODO",
+                Created = DateTime.Now,
+                LastEdit = DateTime.Now,
+                Note = "Placeholder"
+            };
             _todoNotes.Add(todoNote);
             return Ok(Json(todoNote));
         }
@@ -121,15 +128,45 @@ namespace Todo.MVC.Controllers
 
         public IActionResult CreateChecklist()
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
-            var todoChecklist = new TodoChecklist();
+            var todoChecklist = new TodoChecklist
+            {
+                Title = "TODO",
+                Created = DateTime.Now,
+                LastEdit = DateTime.Now,
+                CheckList = new List<TodoCheckListItem>
+                {
+                    new TodoCheckListItem
+                    {
+                        Checked = false,
+                        Text = "Placeholder"
+                    }
+                }
+            };
+
             _todoCheckLists.Add(todoChecklist);
             return Ok(Json(todoChecklist));
         }
 
+        public class Delete
+        {
+            public int Id { get; set; }
+            public bool IsChecklist { get; set; }
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteTodoItem([FromBody] Delete delete)
+        {
+            if (delete.IsChecklist)
+                _todoCheckLists.Delete(_todoCheckLists.GetById(delete.Id));
+            else
+                _todoNotes.Delete(_todoNotes.GetById(delete.Id));
+
+            return Ok();
+        }
 
         public IActionResult Error()
         {
