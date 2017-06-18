@@ -8,96 +8,99 @@
     <a class="col s5 btn right" href="#!" id="create-new-note">Create new note</a>
 </div>
 
-@foreach (var note in Model.Notes)
-{
-    <article class="note z-depth-1" data-id="@note.Id">
-        <a class="remove-todo-item right" href="#!">
-            <i class="material-icons">close</i>
-        </a>
-        <a href="#modal-note-@note.Id">
-            <h2 class="title">@note.Title</h2>
-            <div class="note">@note.Note</div>
-        </a>
-        <div id="modal-note-@note.Id" class="modal">
-            <div class="modal-content">
-                <h2 class="title editable" contenteditable="true">@note.Title</h2>
-                <div class="note editable" contenteditable="true">@note.Note</div>
-                <p class="right last-edit">Last edit @note.LastEdit</p>
-            </div>
-            <div class="modal-footer">
-                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Done<i class="material-icons right">send</i></a>
-            </div>
-        </div>
-    </article>
-}
+<div id="notes">
 
-@foreach (var checkList in Model.Checklists)
-{
-    <article class="checklist col s4 z-depth-1" data-id="@checkList.Id">
-        <a class="remove-todo-item right" href="#!">
-            <i class="material-icons">close</i>
-        </a>
-        <a href="#modal-checklist-@checkList.Id">
-            <h2 class="title ">@checkList.Title</h2>
-        </a>
-
-        <div id="checkListItems">
-
-            @foreach (var checkListItem in checkList.CheckList)
-            {
-                <div >
-                    <input type="checkbox"
-                           data-id="@checkListItem.Id"
-                           data-checklist-id="@checkList.Id"
-                           id="indeterminate-checkbox-@checkListItem.Id"
-                           class="checkbox-listener id-nr-@checkListItem.Id"
-                           @if (checkListItem.Checked)
-                           {
-                               @Html.Raw("checked")
-                           }/>
-
-                    <label data-id="@checkListItem.Id" for="indeterminate-checkbox-@checkListItem.Id">
-                        <a href="#modal-checklist-@checkList.Id">
-                            @checkListItem.Text
-                        </a>
-                    </label>
-                    <a href="#!" data-id="@checkListItem.Id" class="remove-checklist-item">
-                        <i class="right material-icons close">close</i>
-                    </a>
-
+    @foreach (var note in Model.Notes)
+    {
+        <article class="note z-depth-1" data-id="@note.Id">
+            <a class="remove-todo-item right" href="#!">
+                <i class="material-icons">close</i>
+            </a>
+            <a href="#modal-note-@note.Id">
+                <h2 class="title">@note.Title</h2>
+                <div class="note">@note.Note</div>
+            </a>
+            <div id="modal-note-@note.Id" class="modal">
+                <div class="modal-content">
+                    <h2 class="title editable" contenteditable="true">@note.Title</h2>
+                    <div class="note editable" contenteditable="true">@note.Note</div>
+                    <p class="right last-edit">Last edit @note.LastEdit</p>
                 </div>
-            }
-        </div>
+                <div class="modal-footer">
+                    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Done<i class="material-icons right">send</i></a>
+                </div>
+            </div>
+        </article>
+    }
+</div>
+<div id="checklists">
+    @foreach (var checkList in Model.Checklists)
+    {
+        <article class="checklist col s4 z-depth-1" data-id="@checkList.Id">
+            <a class="remove-todo-item right" href="#!">
+                <i class="material-icons">close</i>
+            </a>
+            <a href="#modal-checklist-@checkList.Id">
+                <h2 class="title ">@checkList.Title</h2>
+            </a>
 
-        <div id="modal-checklist-@checkList.Id" class="modal">
-            <div class="modal-content">
-                <h2 class="title editable" contenteditable="true">@checkList.Title</h2>
-                <div id="checkListItemsModal">
+            <div id="checkListItems">
 
-                    @foreach (var checkListItem in checkList.CheckList)
-                    {
-                        <div >
-                            <input type="checkbox" data-id="@checkListItem.Id" data-checklist-id="@checkList.Id" id="indeterminate-checkbox-modal-@checkListItem.Id" class="id-nr-@checkListItem.Id" @if (checkListItem.Checked)
-                                                                                                                                                                                                     {
-                                                                                                                                                                                                         @Html.Raw("checked")
-                                                                                                                                                                                                     }/>
+                @foreach (var checkListItem in checkList.CheckList)
+                {
+                    <div >
+                        <input type="checkbox"
+                               data-id="@checkListItem.Id"
+                               data-checklist-id="@checkList.Id"
+                               id="indeterminate-checkbox-@checkListItem.Id"
+                               class="checkbox-listener id-nr-@checkListItem.Id"
+                               @if (checkListItem.Checked)
+                               {
+                                   @Html.Raw("checked")
+                               }/>
 
-                            <label class="item-name" data-id="@checkListItem.Id" contenteditable="true" for="indeterminate-checkbox-modal-@checkListItem.Id">@checkListItem.Text</label>
-                            <a href="#!" data-id="@checkListItem.Id" class="remove-checklist-item">
-                                <i class="right material-icons close">close</i>
+                        <label data-id="@checkListItem.Id" for="indeterminate-checkbox-@checkListItem.Id">
+                            <a href="#modal-checklist-@checkList.Id">
+                                @checkListItem.Text
                             </a>
-                        </div>
-                    }
-                </div>
-                <div class="row">
-                    <a href="#!" id="add-new-checklistbutton" class="col s12 btn">Add new checkbox</a>
-                </div>
-                <p class="right last-edit">Last edit @checkList.LastEdit</p>
+                        </label>
+                        <a href="#!" data-id="@checkListItem.Id" class="remove-checklist-item">
+                            <i class="right material-icons close">close</i>
+                        </a>
 
+                    </div>
+                }
             </div>
-            <div class="modal-footer">
-                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Done<i class="material-icons right">send</i></a>
+
+            <div id="modal-checklist-@checkList.Id" class="modal">
+                <div class="modal-content">
+                    <h2 class="title editable" contenteditable="true">@checkList.Title</h2>
+                    <div id="checkListItemsModal">
+
+                        @foreach (var checkListItem in checkList.CheckList)
+                        {
+                            <div >
+                                <input type="checkbox" data-id="@checkListItem.Id" data-checklist-id="@checkList.Id" id="indeterminate-checkbox-modal-@checkListItem.Id" class="id-nr-@checkListItem.Id" @if (checkListItem.Checked)
+                                                                                                                                                                                                         {
+                                                                                                                                                                                                             @Html.Raw("checked")
+                                                                                                                                                                                                         }/>
+
+                                <label class="item-name" data-id="@checkListItem.Id" contenteditable="true" for="indeterminate-checkbox-modal-@checkListItem.Id">@checkListItem.Text</label>
+                                <a href="#!" data-id="@checkListItem.Id" class="remove-checklist-item">
+                                    <i class="right material-icons close">close</i>
+                                </a>
+                            </div>
+                        }
+                    </div>
+                    <div class="row">
+                        <a href="#!" class="col s12 btn add-new-checklistbutton">Add new checkbox</a>
+                    </div>
+                    <p class="right last-edit">Last edit @checkList.LastEdit</p>
+
+                </div>
+                <div class="modal-footer">
+                    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Done<i class="material-icons right">send</i></a>
+                </div>
             </div>
-        </div>
-    </article>
-}
+        </article>
+    }</div>
